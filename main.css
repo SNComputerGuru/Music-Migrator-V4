@@ -1,0 +1,178 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, rgb(29, 185, 84), #191414);
+    background-attachment: fixed;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+    animation: fadeIn 1s ease-in-out;
+    transition: box-shadow 300ms ease, transform 300ms ease;
+}
+
+
+.login-section {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.login-card {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-height: 250px;
+    color: white;
+}
+
+.login-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 1px 1px 1px rgb(113, 255, 163);
+}
+
+.card-header {
+    margin-bottom: 20px;
+}
+
+.card-header h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.spotify-card h2 {
+    color: #1db954;
+}
+
+.youtube-card h2 {
+    color: #ff0000;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #dc3545;
+    transition: background-color 0.3s ease;
+}
+
+.status-dot.connected {
+    background-color: #28a745;
+}
+
+.status-text {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+}
+
+.card-content p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.spotify-btn {
+    background-color: #1db954;
+    color: white;
+}
+
+.spotify-btn:hover {
+    background-color: #1ed760;
+    transform: scale(1.02);
+}
+
+.spotify-btn:active {
+    transform: scale(0.95);
+}
+
+.spotify-btn:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.youtube-btn {
+    background-color: #ff0000;
+    color: white;
+}
+
+.youtube-btn:hover {
+    background-color: #ff1a1a;
+    transform: scale(1.02);
+}
+
+.youtube-btn:active {
+    transform: scale(0.95);
+}
+
+.youtube-btn:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+    transform: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .login-section {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .container {
+        padding: 15px;
+    }
+    
+    .login-card {
+        padding: 20px;
+    }
+}
