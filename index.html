@@ -1,35 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Spotify Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music App - Login</title>
+    <link rel="stylesheet" href="main.css">
 </head>
 <body>
-  <h1>Logging in...</h1>
+    <div class="container">
+        <div class="login-section">
+            <div class="login-card spotify-card">
+                <div class="card-header">
+                    <h2>Spotify</h2>
+                    <div class="status-indicator" id="spotify-status">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Not Connected</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <p id="spotify-user-info">Please log in to connect your Spotify account</p>
+                    <button id="spotify-login-btn" class="login-btn spotify-btn">
+                        Connect Spotify
+                    </button>
+                </div>
+            </div>
+            
+            <button id="continue-btn" style="display: none;" class="continue-btn">
+                Continue
+            </button>
 
-  <script>
-    window.onload = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
+            <div class="login-card youtube-card">
+                <div class="card-header">
+                    <h2>YouTube</h2>
+                    <div class="status-indicator" id="youtube-status">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Not Connected</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <p id="youtube-user-info">Please log in to connect your YouTube account</p>
+                    <button id="youtube-login-btn" class="login-btn youtube-btn">
+                        Connect YouTube
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    if (code) {
-      fetch('http://127.0.0.1:3000/api/spotify/token', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code })
-      })
-      .then(res => res.json())
-      .then(data => {
-        sessionStorage.setItem('spotify_access_token', data.access_token);
-        window.location.href = '/main.html';
-      })
-      .catch(err => {
-        console.error("Token exchange failed:", err);
-      });
-    }
-  };
-  </script>
-
+    <script src="main.js"></script>
 </body>
 </html>
