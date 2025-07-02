@@ -1,0 +1,63 @@
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #1db954, #191414);
+  color: #fff;
+  margin: 0;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+h1 {
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+  text-align: center;
+  text-decoration-color: black;
+}
+
+.playlist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.playlist-item {
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.playlist-item:hover {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.playlist-item input[type="checkbox"] {
+  margin-right: 1rem;
+  transform: scale(1.2);
+  accent-color: #1db954;
+}
+
+.playlist-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 1rem;
+}
+
+.playlist-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.playlist-item:has(input[type="checkbox"]:checked) {
+  box-shadow: 0 0 10px 2px #1db954;
+  border: 2px solid #1db954;
+  transition: box-shadow 0.1s ease, border 0.1s ease;
+  background-color: rgba(0, 0, 0, 0.6);
+}

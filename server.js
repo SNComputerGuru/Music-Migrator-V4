@@ -16,6 +16,9 @@ app.use("/", testRouter);
 const spotifyRoute = require("./routes/spotifyRoute");
 app.use("/api", spotifyRoute);
 
+const youtubeRouter = require("./routes/youtubeRoute");
+app.use("/api", youtubeRouter);
+
 //=========================================================
 
 

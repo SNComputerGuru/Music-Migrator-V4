@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YouTube Login</title>
+</head>
+<body>
+  <h1>Logging in to YouTube...</h1>
+
+  <script>
+    window.onload = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+
+      if (code) {
+        fetch('http://127.0.0.1:3000/api/youtube/token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code })
+        })
+        .then(res => res.json())
+        .then(data => {
+          sessionStorage.setItem('youtube_access_token', data.access_token);
+          window.location.href = '/main.html';
+        })
+        .catch(err => {
+          console.error("YouTube token exchange failed:", err);
+        });
+      } else {
+        console.error("No authorization code found in URL.");
+      }
+    };
+  </script>
+</body>
+</html>
