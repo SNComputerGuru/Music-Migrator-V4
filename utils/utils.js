@@ -55,6 +55,10 @@ export function displayPlaylists(playlists) {
       }
     }
 
+    // 🔐 Store updated array in sessionStorage
+    sessionStorage.setItem("selected_playlists", JSON.stringify(selectedPlaylists));
+
     console.log("Selected playlists:", selectedPlaylists);
   }
+
 }
