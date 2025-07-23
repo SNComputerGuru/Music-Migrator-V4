@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Select Spotify Playlists</title>
+  <link rel="stylesheet" href="spotify_playlists.css" />
+</head>
+<body>
+  <h1>Select Your Spotify Playlists</h1>
+
+  <div style="
+            margin-top: 1rem; 
+            text-align: center; 
+            margin-bottom: 1rem;">
+    <p>If you don't see your playlists, try pressing the button below:</p>
+    <button id="display-playlist" 
+      style="
+            padding: 10px 20px; 
+            font-size: 16px; 
+            background-color: #35c567; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer;">
+          Refresh Playlists
+    </button>
+  </div>
+
+  <div id="playlist-list" class="playlist-list">
+    <div class="playlist-item">
+      <input type="checkbox" />
+      <img src="../resources/Efficiencyy.png" alt="Playlist cover" />
+      <div class="playlist-info">
+        <div class="playlist-title">My Playlist Title</div>
+      </div>
+    </div>
+  </div>
+  <script src="./spotify_playlists.js" type="module"></script>
+  <script src="../utils/utils.js" type="module"></script>
+</body>
+</html>

@@ -34,11 +34,6 @@ window.addEventListener('DOMContentLoaded', () => {
     youtubeBtn.style.display = "none";
     youtubeInfo.textContent = "YouTube account connected successfully!";
   }
-
-  // === SHOW CONTINUE BUTTON ===
-  if (spotifyToken && youtubeToken) {
-    continueBtn.style.display = "block"; // or "inline-block" if you'd like it inline
-  }
 });
 
 
@@ -50,4 +45,26 @@ document.getElementById("spotify-login-btn").addEventListener("click", () => {
 // Eventlistener for the Youtube login button
 document.getElementById("youtube-login-btn").addEventListener("click", () => {
   window.location.href = "http://127.0.0.1:3000/api/youtube/login";
+});
+
+
+// Decide whether or not to show the Continue button
+const continueBtn = document.getElementById("continue-btn");
+
+const checkTokens = setInterval(() => {
+  const spotifyToken = sessionStorage.getItem('spotify_access_token');
+  const youtubeToken = sessionStorage.getItem('youtube_access_token');
+
+  if (spotifyToken && youtubeToken) {
+    continueBtn.style.display = "inline";
+    console.log("Both tokens found. Showing Continue button.");
+
+    // Stop checking once both tokens are found
+    clearInterval(checkTokens);
+  }
+}, 500);
+
+// Continue Button redirect to spotify_playlists.html
+document.getElementById("continue-btn").addEventListener("click", () => {
+  window.location.href = "./pages/spotify_playlists.html";
 });

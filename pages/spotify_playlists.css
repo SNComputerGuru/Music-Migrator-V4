@@ -56,8 +56,12 @@ h1 {
 }
 
 .playlist-item:has(input[type="checkbox"]:checked) {
-  box-shadow: 0 0 10px 2px #1db954;
-  border: 2px solid #1db954;
+  box-shadow: 1 2 10px 2px #10ff64;
+  border: 2px solid #fffd83;
   transition: box-shadow 0.1s ease, border 0.1s ease;
   background-color: rgba(0, 0, 0, 0.6);
+}
+
+#display-playlist:active {
+  opacity: 0.7;
 }
