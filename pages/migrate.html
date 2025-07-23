@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Playlist Migration</title>
+  <link rel="stylesheet" href="migrate.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Ready to Migrate!</h1>
+    <p>Here are the playlists you selected from Spotify:</p>
+    <ul id="selected-playlists" class="playlist-list"></ul>
+
+    <button id="start-migration" class="migrate-btn">Start Migration to YouTube</button>
+  </div>
+
+  <script>
+    const selectedPlaylists = JSON.parse(sessionStorage.getItem("selected_playlists")) || [];
+    const listContainer = document.getElementById("selected-playlists");
+
+    if (selectedPlaylists.length === 0) {
+      listContainer.innerHTML = "<li>No playlists selected. Go back and select some.</li>";
+    } else {
+      selectedPlaylists.forEach(playlist => {
+        const li = document.createElement("li");
+        li.textContent = playlist.name;
+        listContainer.appendChild(li);
+      });
+    }
+
+    document.getElementById("start-migration").addEventListener("click", () => {
+      // TODO: Trigger fetch from Spotify → search on YouTube → add to YouTube playlist
+      alert("Migration logic goes here...");
+    });
+  </script>
+</body>
+</html>

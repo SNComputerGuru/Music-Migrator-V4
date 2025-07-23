@@ -2,13 +2,15 @@ const selectedPlaylists = [];
 
 export function displayPlaylists(playlists) {
   const container = document.getElementById("playlist-list");
+  const continueBtn = document.getElementById("continue-btn");
 
   if (!container) {
     console.error("Playlist container not found.");
     return;
   }
 
-  console.log(playlists);
+  const selectedPlaylists = [];
+
   container.innerHTML = "";
 
   playlists.forEach(playlist => {
@@ -17,48 +19,38 @@ export function displayPlaylists(playlists) {
 
     playlistItem.innerHTML = `
       <input type="checkbox">
-      <img src="${playlist.images[0].url}" alt="${playlist.name}">
+      <img src="${playlist.images[0]?.url || ''}" alt="${playlist.name}">
       <span class="playlist-title">${playlist.name}</span>
     `;
 
-    const checkbox = playlistItem.querySelector('input[type="checkbox"]');
+    const checkbox = playlistItem.querySelector("input");
 
     playlistItem.addEventListener("click", (event) => {
       if (event.target.tagName.toLowerCase() === "input") return;
-
       checkbox.checked = !checkbox.checked;
-      handleSelectionChange(checkbox.checked, playlist);
+      checkbox.dispatchEvent(new Event("change"));
     });
 
     checkbox.addEventListener("change", () => {
-      handleSelectionChange(checkbox.checked, playlist);
+      const index = selectedPlaylists.findIndex(p => p.id === playlist.id);
+      if (checkbox.checked && index === -1) {
+        selectedPlaylists.push(playlist);
+      } else if (!checkbox.checked && index !== -1) {
+        selectedPlaylists.splice(index, 1);
+      }
+
+      sessionStorage.setItem("selected_playlists", JSON.stringify(selectedPlaylists));
+
+      //Show/hide the continue button
+      if (selectedPlaylists.length > 0) {
+        continueBtn.style.display = "inline-block";
+      } else {
+        continueBtn.style.display = "none";
+      }
+
+      console.log("Selected:", selectedPlaylists);
     });
 
     container.appendChild(playlistItem);
   });
-
-  function handleSelectionChange(isChecked, playlist) {
-    const playlistInfo = {
-      id: playlist.id,
-      name: playlist.name,
-      image: playlist.images[0].url
-    };
-
-    if (isChecked) {
-      if (!selectedPlaylists.some(p => p.id === playlist.id)) {
-        selectedPlaylists.push(playlistInfo);
-      }
-    } else {
-      const index = selectedPlaylists.findIndex(p => p.id === playlist.id);
-      if (index !== -1) {
-        selectedPlaylists.splice(index, 1);
-      }
-    }
-
-    // 🔐 Store updated array in sessionStorage
-    sessionStorage.setItem("selected_playlists", JSON.stringify(selectedPlaylists));
-
-    console.log("Selected playlists:", selectedPlaylists);
-  }
-
 }
