@@ -1,31 +1,6 @@
 import { displayPlaylists } from "../utils/utils.js";
 
 
-// function displayPlaylists(playlists){
-//   const container = document.getElementById("playlist-container");
-
-//   if (!container) {
-//     console.error("Playlist container not found.");
-//     return;
-//   }
-//   console.log(playlists);
-//   // Clear existing playlists to avoid duplicates
-//   container.innerHTML = "";
-
-//   playlists.forEach(playlist => {
-//     const playlistItem = document.createElement("div");
-//     playlistItem.classList.add("playlist-item");
-
-//     playlistItem.innerHTML = `
-//       <input type="checkbox" value="${playlist.id}">
-//       <img src="${playlist.image}" alt="${playlist.name}">
-//       <span class="playlist-title">${playlist.name}</span>
-//     `;
-
-//     container.appendChild(playlistItem);
-//   });
-// }
-
 
 
 // onclick for the Refresh Playlists button

@@ -33,7 +33,7 @@ exports.exchangeYoutubeToken = async (req, res) => {
       grant_type: "authorization_code"
     });
 
-    res.json(response.data); // access_token, refresh_token, etc.
+    res.json(response.data);
 
   } catch (error) {
     console.error("YouTube token exchange failed:", error.response?.data || error.message);
