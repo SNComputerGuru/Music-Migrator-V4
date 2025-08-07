@@ -5,6 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Playlist Migration</title>
   <link rel="stylesheet" href="migrate.css" />
+  <style>
+    .migrate-individual {
+      margin-left: 1rem;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      background: linear-gradient(to right, #1db954, #ff0000);
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      transition: transform 0.2s ease-in-out;
+    }
+
+    .migrate-individual:hover {
+      transform: scale(1.05);
+    }
+
+    .playlist-list li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      padding: 8px 12px;
+      background-color: #190505;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -16,23 +43,76 @@
   </div>
 
   <script>
-    const selectedPlaylists = JSON.parse(sessionStorage.getItem("selected_playlists")) || [];
-    const listContainer = document.getElementById("selected-playlists");
+  const selectedPlaylists = JSON.parse(sessionStorage.getItem("selected_playlists")) || [];
+  const listContainer = document.getElementById("selected-playlists");
 
-    if (selectedPlaylists.length === 0) {
-      listContainer.innerHTML = "<li>No playlists selected. Go back and select some.</li>";
-    } else {
-      selectedPlaylists.forEach(playlist => {
-        const li = document.createElement("li");
-        li.textContent = playlist.name;
-        listContainer.appendChild(li);
-      });
-    }
+  const spotify_access_token = sessionStorage.getItem("spotify_access_token");
+  const youtube_access_token = sessionStorage.getItem("youtube_access_token");
 
-    document.getElementById("start-migration").addEventListener("click", () => {
-      // TODO: Trigger fetch from Spotify → search on YouTube → add to YouTube playlist
-      alert("Migration logic goes here...");
+  if (selectedPlaylists.length === 0) {
+    listContainer.innerHTML = "<li>No playlists selected. Go back and select some.</li>";
+  } else {
+    selectedPlaylists.forEach((playlist, index) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <span>${playlist.name}</span>
+        <button class="migrate-individual" data-index="${index}">Migrate</button>
+      `;
+      listContainer.appendChild(li);
     });
-  </script>
+
+    document.querySelectorAll(".migrate-individual").forEach(button => {
+      button.addEventListener("click", async (e) => {
+        const index = e.target.dataset.index;
+        const playlist = selectedPlaylists[index];
+
+        e.target.disabled = true;
+        e.target.textContent = "Migrating...";
+
+        try {
+          const response = await fetch("/api/spotify/migrate", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              spotifyPlaylistId: playlist.id,
+              spotify_access_token,
+              youtube_access_token
+            })
+          });
+
+          const result = await response.json();
+          console.log(result);
+
+          if (response.ok) {
+            if (result.missedTracks && result.missedTracks.length > 0) {
+              sessionStorage.setItem(
+                `missedTracks_${playlist.id}`,
+                JSON.stringify(result.missedTracks)
+              );
+            }
+
+            e.target.textContent = "✔ Migrated";
+            alert(`✅ Playlist "${playlist.name}" migrated to YouTube successfully.`);
+          } else {
+            e.target.textContent = "❌ Failed";
+            alert(`❌ Migration failed: ${result.error || "Unknown error"}`);
+          }
+        } catch (error) {
+          console.error("Migration error:", error);
+          e.target.textContent = "❌ Error";
+          alert("⚠️ Something went wrong during migration. Check the console for details.");
+        }
+
+        setTimeout(() => {
+          e.target.disabled = false;
+          e.target.textContent = "Migrate";
+        }, 3000);
+      });
+    });
+  }
+</script>
+
 </body>
 </html>
