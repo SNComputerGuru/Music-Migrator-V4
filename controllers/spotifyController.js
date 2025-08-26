@@ -99,90 +99,90 @@ exports.portSpotifyPlaylistToYouTube = async (req, res) => {
 
   // Validate required params
   if (!spotifyPlaylistId) {
-    console.log('❌ Missing "spotifyPlaylistId" in request body')
+    console.log('Missing "spotifyPlaylistId" in request body')
     return res.status(400).json({ error: 'spotifyPlaylistId is required' })
   }
 
   if (!youtube_access_token) {
-    console.log('❌ Missing youtube_access_token in request body')
+    console.log('Missing youtube_access_token in request body')
     return res.status(400).json({ error: 'youtube_access_token is required' })
   }
 
   if (!spotify_access_token) {
-    console.log('❌ Missing spotify_access_token in request body')
+    console.log('Missing spotify_access_token in request body')
     return res.status(400).json({ error: 'spotify_access_token is required' })
   }
 
   
 
   try {
-    console.log('➡️ Starting playlist migration...')
-    console.log(`✅ Using Spotify playlist ID: ${spotifyPlaylistId}`)
+    console.log('Starting playlist migration...')
+    console.log(`Using Spotify playlist ID: ${spotifyPlaylistId}`)
 
     let playlistMeta
     try {
-      console.log('📡 Fetching Spotify playlist metadata...')
+      console.log('Fetching Spotify playlist metadata...')
       playlistMeta = await getSpotifyPlaylistMeta(spotifyPlaylistId, spotify_access_token)
     } catch (e) {
-      console.error('❌ Failed to fetch Spotify playlist metadata:', e.response?.data || e.message)
+      console.error('Failed to fetch Spotify playlist metadata:', e.response?.data || e.message)
       return res.status(500).json({ error: 'Failed to fetch Spotify playlist metadata' })
     }
 
     const playlistName = playlistMeta.name || `Imported Playlist ${spotifyPlaylistId}`
-    console.log(`✅ Playlist name: "${playlistName}"`)
+    console.log(`Playlist name: "${playlistName}"`)
 
     let spotifyTracks
     try {
-      console.log('📡 Fetching Spotify playlist tracks...')
+      console.log('Fetching Spotify playlist tracks...')
       spotifyTracks = await getSpotifyTracks(spotifyPlaylistId, spotify_access_token)
     } catch (e) {
-      console.error('❌ Failed to fetch Spotify tracks:', e.response?.data || e.message)
+      console.error('Failed to fetch Spotify tracks:', e.response?.data || e.message)
       return res.status(500).json({ error: 'Failed to fetch tracks from Spotify' })
     }
 
     if (!spotifyTracks.length) {
-      console.log('⚠️ Spotify playlist is empty')
+      console.log('Spotify playlist is empty')
       return res.status(400).json({ error: 'Spotify playlist is empty' })
     }
 
-    console.log(`✅ Fetched ${spotifyTracks.length} tracks from Spotify`)
+    console.log(`Fetched ${spotifyTracks.length} tracks from Spotify`)
 
     let youtubePlaylistId
     try {
-      console.log('🛠 Creating YouTube playlist...')
+      console.log('Creating YouTube playlist...')
       youtubePlaylistId = await createYouTubePlaylist(playlistName, youtube_access_token)
     } catch (e) {
-      console.error('❌ Failed to create YouTube playlist:', e.response?.data || e.message)
+      console.error('Failed to create YouTube playlist:', e.response?.data || e.message)
       return res.status(500).json({ error: 'Failed to create YouTube playlist' })
     }
 
-    console.log(`✅ Created YouTube playlist with ID: ${youtubePlaylistId}`)
+    console.log(`Created YouTube playlist with ID: ${youtubePlaylistId}`)
 
     const missedTracks = []
 
-    console.log('▶️ Migrating tracks one by one...')
+    console.log('Migrating tracks one by one...')
     for (const track of spotifyTracks) {
       const query = `${track.name} ${track.artist}`
-      console.log(`🔍 Searching YouTube for: "${query}"`)
+      console.log(`Searching YouTube for: "${query}"`)
 
       try {
         const videoId = await searchYouTube(query, youtube_access_token)
 
         if (videoId) {
-          console.log(`🎯 Found video ID: ${videoId}, adding to YouTube playlist...`)
+          console.log(`Found video ID: ${videoId}, adding to YouTube playlist...`)
           await addToYouTubePlaylist(videoId, youtubePlaylistId, youtube_access_token)
         } else {
-          console.log(`❌ No YouTube match found for: "${query}"`)
+          console.log(`No YouTube match found for: "${query}"`)
           missedTracks.push(query)
         }
       } catch (e) {
-        console.error(`❌ Error processing track "${query}":`, e.response?.data || e.message)
+        console.error(`Error processing track "${query}":`, e.response?.data || e.message)
         missedTracks.push(query)
       }
     }
 
-    console.log('✅ Migration complete')
-    console.log(`📝 Missed tracks: ${missedTracks.length}`)
+    console.log('Migration complete')
+    console.log(`Missed tracks: ${missedTracks.length}`)
 
     res.json({
       message: 'Transfer complete',

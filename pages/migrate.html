@@ -94,15 +94,15 @@
             }
 
             e.target.textContent = "✔ Migrated";
-            alert(`✅ Playlist "${playlist.name}" migrated to YouTube successfully.`);
+            alert(`Playlist "${playlist.name}" migrated to YouTube successfully.`);
           } else {
-            e.target.textContent = "❌ Failed";
-            alert(`❌ Migration failed: ${result.error || "Unknown error"}`);
+            e.target.textContent = "Failed";
+            alert(`Migration failed: ${result.error || "Unknown error"}`);
           }
         } catch (error) {
           console.error("Migration error:", error);
-          e.target.textContent = "❌ Error";
-          alert("⚠️ Something went wrong during migration. Check the console for details.");
+          e.target.textContent = "Error";
+          alert("Something went wrong during migration. Check the console for details.");
         }
 
         setTimeout(() => {
